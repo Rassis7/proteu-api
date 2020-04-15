@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "module": "commonjs",
+    "incremental": true,
+    "target": "es2018",
+    "lib": ["es6", "esnext", "es2015"],
+    "removeComments": false,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "./build",
+    "rootDir": "./",
+
+    /* Additional Checks */
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "suppressImplicitAnyIndexErrors": true,
+
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+
+    /* Decorator Options */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["**/*.ts"],
+  "files": ["server.ts"],
+  "exclude": ["node_modules", "build"]
+}

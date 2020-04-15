@@ -1,0 +1,51 @@
+type Query {
+  currentUser: User!
+}
+
+type Mutation {
+  authenticate(input: AuthenticateInput!): AuthenticatePayload!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+}
+
+type AuthenticatePayload {
+  token: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+  status: UserStatus!
+  name: String
+  email: EmailAddress!
+  role: UserRole!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum UserRole {
+  ADMIN
+  BASIC
+}
+
+input CreateUserInput {
+  email: EmailAddress!
+  password: String!
+  name: String!
+}
+
+input UpdateUserInput {
+  email: EmailAddress
+  password: String
+  name: String
+}
+
+input AuthenticateInput {
+  email: EmailAddress!
+  password: String!
+}

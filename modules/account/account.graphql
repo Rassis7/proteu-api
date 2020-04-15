@@ -1,0 +1,32 @@
+type Query {
+  currentAccount: Account
+}
+
+type Mutation {
+  updateAccount(id: ID!, input: UpdateAccountInput!): Account!
+}
+
+type Account {
+  id: ID!
+  admin: User!
+  users: [User!]!
+  # apik: APIK
+  status: AccountStatus
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum AccountStatus {
+  ACTIVE
+  DISABLED
+}
+
+input CreateAccountInput {
+  admin: ID!
+}
+
+input UpdateAccountInput {
+  admin: ID!
+  users: [ID!]
+  status: AccountStatus
+}
