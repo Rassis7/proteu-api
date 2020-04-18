@@ -4,8 +4,8 @@ import { CreateAccountInput, UpdateAccountInput } from "./../../../generated";
 
 @Injectable()
 export class AccountProvider {
-  async getByUser(userId: string): Promise<Account> {
-    return AccountModel.findOne({ admin: userId }).exec();
+  async getAccountsByUser(userId: string): Promise<Account[]> {
+    return AccountModel.find({ admin: userId }).exec();
   }
 
   async create(input: CreateAccountInput): Promise<Account> {

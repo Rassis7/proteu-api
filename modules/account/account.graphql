@@ -1,5 +1,5 @@
 type Query {
-  currentAccount: Account
+  accounts: [Account]!
 }
 
 type Mutation {
@@ -9,7 +9,6 @@ type Mutation {
 type Account {
   id: ID!
   admin: User!
-  users: [User!]!
   # apik: APIK
   status: AccountStatus
   createdAt: DateTime!
@@ -27,6 +26,5 @@ input CreateAccountInput {
 
 input UpdateAccountInput {
   admin: ID!
-  users: [ID!]
   status: AccountStatus
 }

@@ -1,5 +1,3 @@
-import { AccountProvider } from "./../account/providers/account.provider";
-import { AccountModule } from "./../account/account.module";
 import { GraphQLModule } from "@graphql-modules/core";
 import { AppModuleContext, AppModuleSession } from "../../app.module";
 import { CommonModule } from "../common/common.module";
@@ -7,12 +5,12 @@ import { importSchema } from "../common/utils/schema";
 import { UserProvider } from "./providers/user.provider";
 import {
   userResolvers,
-  userResolversComposition,
+  userResolversComposition
 } from "./resolvers/user.resolver";
 
 export const UserModule = new GraphQLModule({
   imports: [CommonModule],
-  providers: [UserProvider, AccountProvider],
+  providers: [UserProvider],
   typeDefs: importSchema(__dirname + "/user.graphql"),
   resolvers: userResolvers,
   resolversComposition: userResolversComposition,
@@ -25,5 +23,5 @@ export const UserModule = new GraphQLModule({
       .authorizeUser(currentContext.authToken);
 
     return { currentUser };
-  },
+  }
 });

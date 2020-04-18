@@ -5,44 +5,36 @@ import { AccountProvider } from "./../providers/account.provider";
 import {
   AccountResolvers,
   MutationResolvers,
-  QueryResolvers,
+  QueryResolvers
 } from "./../../../generated";
 import { isAuthenticated } from "../../user/compositions/user.compositions";
 
 export const accountResolvers = {
   Query: {
-    currentAccount: async (
-      root,
-      args,
-      { injector, currentUser }
-    ): Promise<Account> => {
-      return injector.get(AccountProvider).getByUser(currentUser.id);
-    },
+    accounts: async (root, _, { injector, currentUser }): Promise<any[]> => {
+      return injector.get(AccountProvider).getAccountsByUser(currentUser.id);
+    }
   } as QueryResolvers,
 
   Account: {
     admin: async (root, _, { injector }): Promise<User> => {
       if (!root.admin) return null;
       return injector.get(UserProvider).getUserById(String(root.admin), false);
-    },
-    users: async (root, _, { injector }): Promise<User[]> => {
-      if (!root.users) return null;
-      return injector.get(UserProvider).getUserByAccounts(root.users as any);
-    },
+    }
   } as AccountResolvers,
 
   Mutation: {
     updateAccount: async (_, { id, input }, { injector }): Promise<Account> => {
       return injector.get(AccountProvider).update(id, input);
-    },
-  } as MutationResolvers,
+    }
+  } as MutationResolvers
 };
 
 export const accountResolversComposition: any = {
   Query: {
-    currentAccount: [isAuthenticated()],
+    accounts: [isAuthenticated()]
   },
   Mutation: {
-    updateAccount: [isAuthenticated()],
-  },
+    updateAccount: [isAuthenticated()]
+  }
 };

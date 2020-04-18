@@ -28,7 +28,6 @@ export type Account = {
   __typename?: "Account";
   id: Scalars["ID"];
   admin: User;
-  users: Array<User>;
   status?: Maybe<AccountStatus>;
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
@@ -98,13 +97,12 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: "Query";
-  currentAccount?: Maybe<Account>;
+  accounts: Array<Maybe<Account>>;
   currentUser: User;
 };
 
 export type UpdateAccountInput = {
   admin: Scalars["ID"];
-  users?: Maybe<Array<Scalars["ID"]>>;
   status?: Maybe<AccountStatus>;
 };
 
@@ -272,7 +270,6 @@ export type AccountResolvers<
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   admin?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
-  users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
   status?: Resolver<
     Maybe<ResolversTypes["AccountStatus"]>,
     ParentType,
@@ -368,8 +365,8 @@ export type QueryResolvers<
   ContextType = AppModuleContext,
   ParentType = ResolversParentTypes["Query"]
 > = {
-  currentAccount?: Resolver<
-    Maybe<ResolversTypes["Account"]>,
+  accounts?: Resolver<
+    Array<Maybe<ResolversTypes["Account"]>>,
     ParentType,
     ContextType
   >;

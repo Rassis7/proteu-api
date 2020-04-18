@@ -8,7 +8,7 @@ import {
   AuthenticateInput,
   UserStatus,
   CreateUserInput,
-  UpdateUserInput,
+  UpdateUserInput
 } from "../../../generated";
 import { UserModel, User } from "../models/user.model";
 
@@ -17,7 +17,7 @@ export class UserProvider {
   async createUser(input: CreateUserInput) {
     const userInput = {
       ...input,
-      password: await argon2.hash(input.password),
+      password: await argon2.hash(input.password)
     };
 
     try {
@@ -25,8 +25,7 @@ export class UserProvider {
 
       if (user) {
         const account = await AccountModel.create({
-          admin: user.id,
-          users: [user.id],
+          admin: user.id
         });
         if (!account)
           throw new ApolloError(
@@ -59,12 +58,6 @@ export class UserProvider {
     }
   }
 
-  async getUserByAccounts(
-    ids: (string | Types.ObjectId)[]
-  ): Promise<Partial<User[]>> {
-    return UserModel.find({ _id: { $in: ids } }).exec();
-  }
-
   async getUserByEmail(
     email: string,
     returnPassword: boolean = false
@@ -72,13 +65,13 @@ export class UserProvider {
     if (returnPassword) {
       return UserModel.findOne(
         {
-          email,
+          email
         },
         "+password"
       );
     } else {
       return UserModel.findOne({
-        email,
+        email
       });
     }
   }
@@ -109,7 +102,6 @@ export class UserProvider {
     if (!isPasswordValid) {
       throw new AuthenticationError("Invalid password.");
     }
-    console.log(user);
 
     return user;
   }
@@ -145,7 +137,7 @@ export class UserProvider {
     return signToken({
       audience: "user",
       expiresIn: "30d",
-      subject: userId,
+      subject: userId
     });
   }
 }
