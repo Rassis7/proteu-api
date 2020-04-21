@@ -16,7 +16,7 @@ export class User extends Typegoose {
   @prop({ unique: true })
   email: string;
 
-  @prop({ enum: UserRole, default: UserRole.Basic })
+  @prop({ enum: UserRole, default: UserRole.Admin })
   role: UserRole;
 
   @prop()
@@ -30,5 +30,5 @@ export class User extends Typegoose {
 }
 
 export const UserModel = new User().getModelForClass(User, {
-  schemaOptions: { timestamps: true, validateBeforeSave: false },
+  schemaOptions: { timestamps: true, validateBeforeSave: false }
 });

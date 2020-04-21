@@ -46,6 +46,7 @@
     "reflect-metadata": "0.1.13",
     "typegoose": "5.7.2",
     "typescript": "3.5.2",
+    "uuid": "^7.0.3",
     "validator": "11.0.0",
     "yup": "0.27.0"
   },

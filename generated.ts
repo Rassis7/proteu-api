@@ -28,12 +28,53 @@ export type Account = {
   __typename?: "Account";
   id: Scalars["ID"];
   admin: User;
+  apik?: Maybe<Apik>;
   status?: Maybe<AccountStatus>;
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
 };
 
 export enum AccountStatus {
+  Active = "ACTIVE",
+  Disabled = "DISABLED"
+}
+
+export type Apik = {
+  __typename?: "APIK";
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  keyPrefix: Scalars["String"];
+  scopes: Array<ApikScopes>;
+  status: ApikStatus;
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  deletedAt?: Maybe<Scalars["DateTime"]>;
+};
+
+export type ApikCreatedType = {
+  __typename?: "APIKCreatedType";
+  id: Scalars["ID"];
+  name: Scalars["String"];
+  key: Scalars["String"];
+  scopes: Array<ApikScopes>;
+  createdAt: Scalars["DateTime"];
+};
+
+export type ApikDeletedType = {
+  __typename?: "APIKDeletedType";
+  status: ApikStatus;
+  deletedAt: Scalars["DateTime"];
+};
+
+export enum ApikScopes {
+  TicketCreate = "TICKET_CREATE",
+  TicketUpdate = "TICKET_UPDATE",
+  SendTicketsByEmail = "SEND_TICKETS_BY_EMAIL",
+  ResendTicketsByEmail = "RESEND_TICKETS_BY_EMAIL",
+  InvalidateTicket = "INVALIDATE_TICKET"
+}
+
+export enum ApikStatus {
   Active = "ACTIVE",
   Disabled = "DISABLED"
 }
@@ -53,6 +94,12 @@ export type CreateAccountInput = {
   admin: Scalars["ID"];
 };
 
+export type CreateApikInput = {
+  accountId: Scalars["ID"];
+  name: Scalars["String"];
+  scopes: Array<ApikScopes>;
+};
+
 export type CreateUserInput = {
   email: Scalars["EmailAddress"];
   password: Scalars["String"];
@@ -62,6 +109,10 @@ export type CreateUserInput = {
 export enum Currency {
   Brl = "BRL"
 }
+
+export type DeleteApikInput = {
+  id: Scalars["ID"];
+};
 
 export type File = {
   __typename?: "File";
@@ -73,6 +124,9 @@ export type File = {
 export type Mutation = {
   __typename?: "Mutation";
   updateAccount: Account;
+  create: ApikCreatedType;
+  update: Apik;
+  delete: ApikDeletedType;
   authenticate: AuthenticatePayload;
   createUser: User;
   updateUser: User;
@@ -81,6 +135,18 @@ export type Mutation = {
 export type MutationUpdateAccountArgs = {
   id: Scalars["ID"];
   input: UpdateAccountInput;
+};
+
+export type MutationCreateArgs = {
+  input?: Maybe<CreateApikInput>;
+};
+
+export type MutationUpdateArgs = {
+  input?: Maybe<UpdateApikInput>;
+};
+
+export type MutationDeleteArgs = {
+  input?: Maybe<DeleteApikInput>;
 };
 
 export type MutationAuthenticateArgs = {
@@ -104,6 +170,13 @@ export type Query = {
 export type UpdateAccountInput = {
   admin: Scalars["ID"];
   status?: Maybe<AccountStatus>;
+};
+
+export type UpdateApikInput = {
+  id: Scalars["ID"];
+  name?: Maybe<Scalars["String"]>;
+  scopes?: Maybe<Array<ApikScopes>>;
+  status?: Maybe<ApikStatus>;
 };
 
 export type UpdateUserInput = {
@@ -213,9 +286,17 @@ export type ResolversTypes = {
   EmailAddress: ResolverTypeWrapper<Partial<Scalars["EmailAddress"]>>;
   UserRole: ResolverTypeWrapper<Partial<UserRole>>;
   DateTime: ResolverTypeWrapper<Partial<Scalars["DateTime"]>>;
+  APIK: ResolverTypeWrapper<Partial<Apik>>;
+  APIKScopes: ResolverTypeWrapper<Partial<ApikScopes>>;
+  APIKStatus: ResolverTypeWrapper<Partial<ApikStatus>>;
   AccountStatus: ResolverTypeWrapper<Partial<AccountStatus>>;
   Mutation: ResolverTypeWrapper<{}>;
   UpdateAccountInput: ResolverTypeWrapper<Partial<UpdateAccountInput>>;
+  CreateAPIKInput: ResolverTypeWrapper<Partial<CreateApikInput>>;
+  APIKCreatedType: ResolverTypeWrapper<Partial<ApikCreatedType>>;
+  UpdateAPIKInput: ResolverTypeWrapper<Partial<UpdateApikInput>>;
+  DeleteAPIKInput: ResolverTypeWrapper<Partial<DeleteApikInput>>;
+  APIKDeletedType: ResolverTypeWrapper<Partial<ApikDeletedType>>;
   AuthenticateInput: ResolverTypeWrapper<Partial<AuthenticateInput>>;
   AuthenticatePayload: ResolverTypeWrapper<Partial<AuthenticatePayload>>;
   CreateUserInput: ResolverTypeWrapper<Partial<CreateUserInput>>;
@@ -244,9 +325,17 @@ export type ResolversParentTypes = {
   EmailAddress: Partial<Scalars["EmailAddress"]>;
   UserRole: Partial<UserRole>;
   DateTime: Partial<Scalars["DateTime"]>;
+  APIK: Partial<Apik>;
+  APIKScopes: Partial<ApikScopes>;
+  APIKStatus: Partial<ApikStatus>;
   AccountStatus: Partial<AccountStatus>;
   Mutation: {};
   UpdateAccountInput: Partial<UpdateAccountInput>;
+  CreateAPIKInput: Partial<CreateApikInput>;
+  APIKCreatedType: Partial<ApikCreatedType>;
+  UpdateAPIKInput: Partial<UpdateApikInput>;
+  DeleteAPIKInput: Partial<DeleteApikInput>;
+  APIKDeletedType: Partial<ApikDeletedType>;
   AuthenticateInput: Partial<AuthenticateInput>;
   AuthenticatePayload: Partial<AuthenticatePayload>;
   CreateUserInput: Partial<CreateUserInput>;
@@ -270,6 +359,7 @@ export type AccountResolvers<
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   admin?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  apik?: Resolver<Maybe<ResolversTypes["APIK"]>, ParentType, ContextType>;
   status?: Resolver<
     Maybe<ResolversTypes["AccountStatus"]>,
     ParentType,
@@ -277,6 +367,51 @@ export type AccountResolvers<
   >;
   createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+};
+
+export type ApikResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes["APIK"]
+> = {
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  keyPrefix?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  scopes?: Resolver<
+    Array<ResolversTypes["APIKScopes"]>,
+    ParentType,
+    ContextType
+  >;
+  status?: Resolver<ResolversTypes["APIKStatus"], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  deletedAt?: Resolver<
+    Maybe<ResolversTypes["DateTime"]>,
+    ParentType,
+    ContextType
+  >;
+};
+
+export type ApikCreatedTypeResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes["APIKCreatedType"]
+> = {
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  key?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  scopes?: Resolver<
+    Array<ResolversTypes["APIKScopes"]>,
+    ParentType,
+    ContextType
+  >;
+  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+};
+
+export type ApikDeletedTypeResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes["APIKDeletedType"]
+> = {
+  status?: Resolver<ResolversTypes["APIKStatus"], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
 };
 
 export type AuthenticatePayloadResolvers<
@@ -330,6 +465,24 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     MutationUpdateAccountArgs
+  >;
+  create?: Resolver<
+    ResolversTypes["APIKCreatedType"],
+    ParentType,
+    ContextType,
+    MutationCreateArgs
+  >;
+  update?: Resolver<
+    ResolversTypes["APIK"],
+    ParentType,
+    ContextType,
+    MutationUpdateArgs
+  >;
+  delete?: Resolver<
+    ResolversTypes["APIKDeletedType"],
+    ParentType,
+    ContextType,
+    MutationDeleteArgs
   >;
   authenticate?: Resolver<
     ResolversTypes["AuthenticatePayload"],
@@ -398,6 +551,9 @@ export type UserResolvers<
 
 export type Resolvers<ContextType = AppModuleContext> = {
   Account?: AccountResolvers<ContextType>;
+  APIK?: ApikResolvers<ContextType>;
+  APIKCreatedType?: ApikCreatedTypeResolvers<ContextType>;
+  APIKDeletedType?: ApikDeletedTypeResolvers<ContextType>;
   AuthenticatePayload?: AuthenticatePayloadResolvers<ContextType>;
   Date?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
