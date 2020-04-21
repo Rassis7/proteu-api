@@ -1,3 +1,4 @@
+import { APIKModule } from "./../apik/apik.module";
 import { GraphQLModule } from "@graphql-modules/core";
 import { CommonModule } from "../common/common.module";
 import { UserModule } from "./../user/user.module";
@@ -9,7 +10,7 @@ import {
 } from "./resolvers/account.resolver";
 
 export const AccountModule = new GraphQLModule({
-  imports: [CommonModule, UserModule],
+  imports: [CommonModule, UserModule, APIKModule],
   providers: [AccountProvider],
   typeDefs: importSchema(__dirname + "/account.graphql"),
   resolvers: accountResolvers,

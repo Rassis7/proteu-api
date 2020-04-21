@@ -1,0 +1,59 @@
+type Mutation {
+  create(input: CreateAPIKInput): APIKCreatedType!
+  update(input: UpdateAPIKInput): APIK!
+  delete(input: DeleteAPIKInput): APIKDeletedType!
+}
+
+type APIK {
+  id: ID!
+  name: String!
+  keyPrefix: String!
+  scopes: [APIKScopes!]!
+  status: APIKStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type APIKCreatedType {
+  id: ID!
+  name: String!
+  key: String!
+  scopes: [APIKScopes!]!
+  createdAt: DateTime!
+}
+
+type APIKDeletedType {
+  status: APIKStatus!
+  deletedAt: DateTime!
+}
+
+input CreateAPIKInput {
+  accountId: ID!
+  name: String!
+  scopes: [APIKScopes!]!
+}
+
+input UpdateAPIKInput {
+  id: ID!
+  name: String
+  scopes: [APIKScopes!]
+  status: APIKStatus
+}
+
+input DeleteAPIKInput {
+  id: ID!
+}
+
+enum APIKScopes {
+  TICKET_CREATE
+  TICKET_UPDATE
+  SEND_TICKETS_BY_EMAIL
+  RESEND_TICKETS_BY_EMAIL
+  INVALIDATE_TICKET
+}
+
+enum APIKStatus {
+  ACTIVE
+  DISABLED
+}

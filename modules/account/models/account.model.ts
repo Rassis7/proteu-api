@@ -1,3 +1,4 @@
+import { APIK } from "./../../apik/models/apik.models";
 import { User } from "./../../user/models/user.model";
 import { prop, Typegoose } from "typegoose";
 import { AccountStatus } from "../../../generated";
@@ -10,6 +11,9 @@ export class Account extends Typegoose {
 
   @prop({ ref: User })
   admin: string | Types.ObjectId;
+
+  @prop({ ref: APIK })
+  apik: string | Types.ObjectId;
 
   @prop({ enum: AccountStatus, default: AccountStatus.Active })
   status: AccountStatus;
