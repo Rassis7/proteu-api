@@ -1,9 +1,9 @@
 import {
   GraphQLResolveInfo,
   GraphQLScalarType,
-  GraphQLScalarTypeConfig
-} from "graphql";
-import { AppModuleContext } from "./app.module";
+  GraphQLScalarTypeConfig,
+} from 'graphql';
+import { AppModuleContext } from './app.module';
 export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
@@ -25,62 +25,128 @@ export type Scalars = {
 };
 
 export type Account = {
-  __typename?: "Account";
-  id: Scalars["ID"];
+  __typename?: 'Account';
+  id: Scalars['ID'];
   admin: User;
   status?: Maybe<AccountStatus>;
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export enum AccountStatus {
-  Active = "ACTIVE",
-  Disabled = "DISABLED"
+  Active = 'ACTIVE',
+  Disabled = 'DISABLED',
 }
 
 export type AuthenticateInput = {
-  email: Scalars["EmailAddress"];
-  password: Scalars["String"];
+  email: Scalars['EmailAddress'];
+  password: Scalars['String'];
 };
 
 export type AuthenticatePayload = {
-  __typename?: "AuthenticatePayload";
-  token: Scalars["String"];
+  __typename?: 'AuthenticatePayload';
+  token: Scalars['String'];
   user: User;
 };
 
 export type CreateAccountInput = {
-  admin: Scalars["ID"];
+  admin: Scalars['ID'];
+};
+
+export type CreateEventInput = {
+  name: Scalars['String'];
+  description: Scalars['String'];
+  category: EventCategory;
+  visibility?: Maybe<EventVisibility>;
+  initialDate: Scalars['DateTime'];
+  finalDate: Scalars['DateTime'];
 };
 
 export type CreateUserInput = {
-  email: Scalars["EmailAddress"];
-  password: Scalars["String"];
-  name: Scalars["String"];
+  email: Scalars['EmailAddress'];
+  password: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export enum Currency {
-  Brl = "BRL"
+  Brl = 'BRL',
+}
+
+export type Event = {
+  __typename?: 'Event';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  category: EventCategory;
+  status: EventStatus;
+  visibility: EventVisibility;
+  initialDate: Scalars['DateTime'];
+  finalDate: Scalars['DateTime'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  deletedAt: Scalars['DateTime'];
+};
+
+export enum EventCategory {
+  Social = 'SOCIAL',
+  Business = 'BUSINESS',
+  Religious = 'RELIGIOUS',
+  Academic = 'ACADEMIC',
+  Cultural = 'CULTURAL',
+  Sports = 'SPORTS',
+  Politic = 'POLITIC',
+  Educational = 'EDUCATIONAL',
+}
+
+export type EventDeletedType = {
+  __typename?: 'EventDeletedType';
+  id: Scalars['ID'];
+  status: EventStatus;
+  deletedAt: Scalars['DateTime'];
+};
+
+export enum EventStatus {
+  Active = 'ACTIVE',
+  Disabled = 'DISABLED',
+}
+
+export enum EventVisibility {
+  Public = 'PUBLIC',
+  Private = 'PRIVATE',
 }
 
 export type File = {
-  __typename?: "File";
-  name: Scalars["String"];
-  mimeType: Scalars["String"];
-  url: Scalars["URL"];
+  __typename?: 'File';
+  name: Scalars['String'];
+  mimeType: Scalars['String'];
+  url: Scalars['URL'];
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   updateAccount: Account;
+  createEvent: Event;
+  updateEvent: Event;
+  deleteEvent: EventDeletedType;
   authenticate: AuthenticatePayload;
   createUser: User;
   updateUser: User;
 };
 
 export type MutationUpdateAccountArgs = {
-  id: Scalars["ID"];
   input: UpdateAccountInput;
+};
+
+export type MutationCreateEventArgs = {
+  input?: Maybe<CreateEventInput>;
+};
+
+export type MutationUpdateEventArgs = {
+  input?: Maybe<UpdateEventInput>;
+};
+
+export type MutationDeleteEventArgs = {
+  id: Scalars['ID'];
 };
 
 export type MutationAuthenticateArgs = {
@@ -96,41 +162,58 @@ export type MutationUpdateUserArgs = {
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
   accounts: Array<Maybe<Account>>;
+  events?: Maybe<Array<Event>>;
+  event?: Maybe<Event>;
   currentUser: User;
 };
 
+export type QueryEventArgs = {
+  id: Scalars['ID'];
+};
+
 export type UpdateAccountInput = {
-  admin: Scalars["ID"];
+  id: Scalars['ID'];
+  admin: Scalars['ID'];
   status?: Maybe<AccountStatus>;
 };
 
+export type UpdateEventInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  category?: Maybe<EventCategory>;
+  visibility?: Maybe<EventVisibility>;
+  initialDate?: Maybe<Scalars['DateTime']>;
+  finalDate?: Maybe<Scalars['DateTime']>;
+};
+
 export type UpdateUserInput = {
-  email?: Maybe<Scalars["EmailAddress"]>;
-  password?: Maybe<Scalars["String"]>;
-  name?: Maybe<Scalars["String"]>;
+  email?: Maybe<Scalars['EmailAddress']>;
+  password?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type User = {
-  __typename?: "User";
-  id: Scalars["ID"];
+  __typename?: 'User';
+  id: Scalars['ID'];
   status: UserStatus;
-  name?: Maybe<Scalars["String"]>;
-  email: Scalars["EmailAddress"];
+  name?: Maybe<Scalars['String']>;
+  email: Scalars['EmailAddress'];
   role: UserRole;
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export enum UserRole {
-  Admin = "ADMIN",
-  Basic = "BASIC"
+  Admin = 'ADMIN',
+  Basic = 'BASIC',
 }
 
 export enum UserStatus {
-  Active = "ACTIVE",
-  Disabled = "DISABLED"
+  Active = 'ACTIVE',
+  Disabled = 'DISABLED',
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -206,29 +289,36 @@ export type DirectiveResolverFn<
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   Account: ResolverTypeWrapper<Partial<Account>>;
-  ID: ResolverTypeWrapper<Partial<Scalars["ID"]>>;
+  ID: ResolverTypeWrapper<Partial<Scalars['ID']>>;
   User: ResolverTypeWrapper<Partial<User>>;
   UserStatus: ResolverTypeWrapper<Partial<UserStatus>>;
-  String: ResolverTypeWrapper<Partial<Scalars["String"]>>;
-  EmailAddress: ResolverTypeWrapper<Partial<Scalars["EmailAddress"]>>;
+  String: ResolverTypeWrapper<Partial<Scalars['String']>>;
+  EmailAddress: ResolverTypeWrapper<Partial<Scalars['EmailAddress']>>;
   UserRole: ResolverTypeWrapper<Partial<UserRole>>;
-  DateTime: ResolverTypeWrapper<Partial<Scalars["DateTime"]>>;
+  DateTime: ResolverTypeWrapper<Partial<Scalars['DateTime']>>;
   AccountStatus: ResolverTypeWrapper<Partial<AccountStatus>>;
+  Event: ResolverTypeWrapper<Partial<Event>>;
+  EventCategory: ResolverTypeWrapper<Partial<EventCategory>>;
+  EventStatus: ResolverTypeWrapper<Partial<EventStatus>>;
+  EventVisibility: ResolverTypeWrapper<Partial<EventVisibility>>;
   Mutation: ResolverTypeWrapper<{}>;
   UpdateAccountInput: ResolverTypeWrapper<Partial<UpdateAccountInput>>;
+  CreateEventInput: ResolverTypeWrapper<Partial<CreateEventInput>>;
+  UpdateEventInput: ResolverTypeWrapper<Partial<UpdateEventInput>>;
+  EventDeletedType: ResolverTypeWrapper<Partial<EventDeletedType>>;
   AuthenticateInput: ResolverTypeWrapper<Partial<AuthenticateInput>>;
   AuthenticatePayload: ResolverTypeWrapper<Partial<AuthenticatePayload>>;
   CreateUserInput: ResolverTypeWrapper<Partial<CreateUserInput>>;
   UpdateUserInput: ResolverTypeWrapper<Partial<UpdateUserInput>>;
-  Boolean: ResolverTypeWrapper<Partial<Scalars["Boolean"]>>;
+  Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>;
   CreateAccountInput: ResolverTypeWrapper<Partial<CreateAccountInput>>;
-  JSON: ResolverTypeWrapper<Partial<Scalars["JSON"]>>;
-  Date: ResolverTypeWrapper<Partial<Scalars["Date"]>>;
-  Time: ResolverTypeWrapper<Partial<Scalars["Time"]>>;
-  ObjectId: ResolverTypeWrapper<Partial<Scalars["ObjectId"]>>;
-  PhoneNumber: ResolverTypeWrapper<Partial<Scalars["PhoneNumber"]>>;
-  DocumentNumber: ResolverTypeWrapper<Partial<Scalars["DocumentNumber"]>>;
-  URL: ResolverTypeWrapper<Partial<Scalars["URL"]>>;
+  JSON: ResolverTypeWrapper<Partial<Scalars['JSON']>>;
+  Date: ResolverTypeWrapper<Partial<Scalars['Date']>>;
+  Time: ResolverTypeWrapper<Partial<Scalars['Time']>>;
+  ObjectId: ResolverTypeWrapper<Partial<Scalars['ObjectId']>>;
+  PhoneNumber: ResolverTypeWrapper<Partial<Scalars['PhoneNumber']>>;
+  DocumentNumber: ResolverTypeWrapper<Partial<Scalars['DocumentNumber']>>;
+  URL: ResolverTypeWrapper<Partial<Scalars['URL']>>;
   Currency: ResolverTypeWrapper<Partial<Currency>>;
   File: ResolverTypeWrapper<Partial<File>>;
 };
@@ -237,114 +327,169 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Query: {};
   Account: Partial<Account>;
-  ID: Partial<Scalars["ID"]>;
+  ID: Partial<Scalars['ID']>;
   User: Partial<User>;
   UserStatus: Partial<UserStatus>;
-  String: Partial<Scalars["String"]>;
-  EmailAddress: Partial<Scalars["EmailAddress"]>;
+  String: Partial<Scalars['String']>;
+  EmailAddress: Partial<Scalars['EmailAddress']>;
   UserRole: Partial<UserRole>;
-  DateTime: Partial<Scalars["DateTime"]>;
+  DateTime: Partial<Scalars['DateTime']>;
   AccountStatus: Partial<AccountStatus>;
+  Event: Partial<Event>;
+  EventCategory: Partial<EventCategory>;
+  EventStatus: Partial<EventStatus>;
+  EventVisibility: Partial<EventVisibility>;
   Mutation: {};
   UpdateAccountInput: Partial<UpdateAccountInput>;
+  CreateEventInput: Partial<CreateEventInput>;
+  UpdateEventInput: Partial<UpdateEventInput>;
+  EventDeletedType: Partial<EventDeletedType>;
   AuthenticateInput: Partial<AuthenticateInput>;
   AuthenticatePayload: Partial<AuthenticatePayload>;
   CreateUserInput: Partial<CreateUserInput>;
   UpdateUserInput: Partial<UpdateUserInput>;
-  Boolean: Partial<Scalars["Boolean"]>;
+  Boolean: Partial<Scalars['Boolean']>;
   CreateAccountInput: Partial<CreateAccountInput>;
-  JSON: Partial<Scalars["JSON"]>;
-  Date: Partial<Scalars["Date"]>;
-  Time: Partial<Scalars["Time"]>;
-  ObjectId: Partial<Scalars["ObjectId"]>;
-  PhoneNumber: Partial<Scalars["PhoneNumber"]>;
-  DocumentNumber: Partial<Scalars["DocumentNumber"]>;
-  URL: Partial<Scalars["URL"]>;
+  JSON: Partial<Scalars['JSON']>;
+  Date: Partial<Scalars['Date']>;
+  Time: Partial<Scalars['Time']>;
+  ObjectId: Partial<Scalars['ObjectId']>;
+  PhoneNumber: Partial<Scalars['PhoneNumber']>;
+  DocumentNumber: Partial<Scalars['DocumentNumber']>;
+  URL: Partial<Scalars['URL']>;
   Currency: Partial<Currency>;
   File: Partial<File>;
 };
 
 export type AccountResolvers<
   ContextType = AppModuleContext,
-  ParentType = ResolversParentTypes["Account"]
+  ParentType = ResolversParentTypes['Account']
 > = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  admin?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  admin?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   status?: Resolver<
-    Maybe<ResolversTypes["AccountStatus"]>,
+    Maybe<ResolversTypes['AccountStatus']>,
     ParentType,
     ContextType
   >;
-  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
 };
 
 export type AuthenticatePayloadResolvers<
   ContextType = AppModuleContext,
-  ParentType = ResolversParentTypes["AuthenticatePayload"]
+  ParentType = ResolversParentTypes['AuthenticatePayload']
 > = {
-  token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
 export interface DateScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
-  name: "Date";
+  extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
 }
 
 export interface DateTimeScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
-  name: "DateTime";
+  extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
 }
 
 export interface DocumentNumberScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["DocumentNumber"], any> {
-  name: "DocumentNumber";
+  extends GraphQLScalarTypeConfig<ResolversTypes['DocumentNumber'], any> {
+  name: 'DocumentNumber';
 }
 
 export interface EmailAddressScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["EmailAddress"], any> {
-  name: "EmailAddress";
+  extends GraphQLScalarTypeConfig<ResolversTypes['EmailAddress'], any> {
+  name: 'EmailAddress';
 }
+
+export type EventResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes['Event']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['EventCategory'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['EventStatus'], ParentType, ContextType>;
+  visibility?: Resolver<
+    ResolversTypes['EventVisibility'],
+    ParentType,
+    ContextType
+  >;
+  initialDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  finalDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+};
+
+export type EventDeletedTypeResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes['EventDeletedType']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['EventStatus'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+};
 
 export type FileResolvers<
   ContextType = AppModuleContext,
-  ParentType = ResolversParentTypes["File"]
+  ParentType = ResolversParentTypes['File']
 > = {
-  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  mimeType?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  url?: Resolver<ResolversTypes["URL"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mimeType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['URL'], ParentType, ContextType>;
 };
 
 export interface JsonScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["JSON"], any> {
-  name: "JSON";
+  extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
 }
 
 export type MutationResolvers<
   ContextType = AppModuleContext,
-  ParentType = ResolversParentTypes["Mutation"]
+  ParentType = ResolversParentTypes['Mutation']
 > = {
   updateAccount?: Resolver<
-    ResolversTypes["Account"],
+    ResolversTypes['Account'],
     ParentType,
     ContextType,
     MutationUpdateAccountArgs
   >;
+  createEvent?: Resolver<
+    ResolversTypes['Event'],
+    ParentType,
+    ContextType,
+    MutationCreateEventArgs
+  >;
+  updateEvent?: Resolver<
+    ResolversTypes['Event'],
+    ParentType,
+    ContextType,
+    MutationUpdateEventArgs
+  >;
+  deleteEvent?: Resolver<
+    ResolversTypes['EventDeletedType'],
+    ParentType,
+    ContextType,
+    MutationDeleteEventArgs
+  >;
   authenticate?: Resolver<
-    ResolversTypes["AuthenticatePayload"],
+    ResolversTypes['AuthenticatePayload'],
     ParentType,
     ContextType,
     MutationAuthenticateArgs
   >;
   createUser?: Resolver<
-    ResolversTypes["User"],
+    ResolversTypes['User'],
     ParentType,
     ContextType,
     MutationCreateUserArgs
   >;
   updateUser?: Resolver<
-    ResolversTypes["User"],
+    ResolversTypes['User'],
     ParentType,
     ContextType,
     MutationUpdateUserArgs
@@ -352,48 +497,59 @@ export type MutationResolvers<
 };
 
 export interface ObjectIdScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["ObjectId"], any> {
-  name: "ObjectId";
+  extends GraphQLScalarTypeConfig<ResolversTypes['ObjectId'], any> {
+  name: 'ObjectId';
 }
 
 export interface PhoneNumberScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["PhoneNumber"], any> {
-  name: "PhoneNumber";
+  extends GraphQLScalarTypeConfig<ResolversTypes['PhoneNumber'], any> {
+  name: 'PhoneNumber';
 }
 
 export type QueryResolvers<
   ContextType = AppModuleContext,
-  ParentType = ResolversParentTypes["Query"]
+  ParentType = ResolversParentTypes['Query']
 > = {
   accounts?: Resolver<
-    Array<Maybe<ResolversTypes["Account"]>>,
+    Array<Maybe<ResolversTypes['Account']>>,
     ParentType,
     ContextType
   >;
-  currentUser?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  events?: Resolver<
+    Maybe<Array<ResolversTypes['Event']>>,
+    ParentType,
+    ContextType
+  >;
+  event?: Resolver<
+    Maybe<ResolversTypes['Event']>,
+    ParentType,
+    ContextType,
+    QueryEventArgs
+  >;
+  currentUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
 export interface TimeScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["Time"], any> {
-  name: "Time";
+  extends GraphQLScalarTypeConfig<ResolversTypes['Time'], any> {
+  name: 'Time';
 }
 
 export interface UrlScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes["URL"], any> {
-  name: "URL";
+  extends GraphQLScalarTypeConfig<ResolversTypes['URL'], any> {
+  name: 'URL';
 }
 
 export type UserResolvers<
   ContextType = AppModuleContext,
-  ParentType = ResolversParentTypes["User"]
+  ParentType = ResolversParentTypes['User']
 > = {
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes["UserStatus"], ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  email?: Resolver<ResolversTypes["EmailAddress"], ParentType, ContextType>;
-  role?: Resolver<ResolversTypes["UserRole"], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['UserStatus'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['UserRole'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = AppModuleContext> = {
@@ -403,6 +559,8 @@ export type Resolvers<ContextType = AppModuleContext> = {
   DateTime?: GraphQLScalarType;
   DocumentNumber?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
+  Event?: EventResolvers<ContextType>;
+  EventDeletedType?: EventDeletedTypeResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
   JSON?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;

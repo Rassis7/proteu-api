@@ -1,6 +1,6 @@
-import { Injectable } from "@graphql-modules/di";
-import { Account, AccountModel } from "./../models/account.model";
-import { CreateAccountInput, UpdateAccountInput } from "./../../../generated";
+import { Injectable } from '@graphql-modules/di';
+import { Account, AccountModel } from './../models/account.model';
+import { CreateAccountInput, UpdateAccountInput } from './../../../generated';
 
 @Injectable()
 export class AccountProvider {
@@ -12,7 +12,8 @@ export class AccountProvider {
     return AccountModel.create(input);
   }
 
-  async update(id: string, input: UpdateAccountInput): Promise<Account> {
-    return AccountModel.findByIdAndUpdate(id, { $set: input }, { new: true });
+  async update(input: UpdateAccountInput): Promise<Account> {
+    const { id, ...rest } = input;
+    return AccountModel.findByIdAndUpdate(id, { $set: rest }, { new: true });
   }
 }

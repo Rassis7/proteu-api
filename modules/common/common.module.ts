@@ -1,17 +1,17 @@
-import { GraphQLModule } from "@graphql-modules/core";
-import { GraphQLDate, GraphQLDateTime, GraphQLTime } from "graphql-iso-date";
-import * as GraphQLJSON from "graphql-type-json";
-import * as mongoose from "mongoose";
-import "reflect-metadata";
-import commonConfig from "../../config/db";
-import { GraphQLDocumentNumber } from "./scalars/documentNumber.scalar";
-import { GraphQLEmailAddress } from "./scalars/emailAddress.scalar";
-import { GraphQLObjectId } from "./scalars/objectId.scalar";
-import { GraphQLPhoneNumber } from "./scalars/phoneNumber.scalar";
-import { GraphQLURL } from "./scalars/url.scalar";
-import { extractAuthToken } from "./utils/request";
-import { importSchema } from "./utils/schema";
-import "./utils/yup";
+import { GraphQLModule } from '@graphql-modules/core';
+import { GraphQLDate, GraphQLDateTime, GraphQLTime } from 'graphql-iso-date';
+import * as GraphQLJSON from 'graphql-type-json';
+import * as mongoose from 'mongoose';
+import 'reflect-metadata';
+import commonConfig from '../../config/db';
+import { GraphQLDocumentNumber } from './scalars/documentNumber.scalar';
+import { GraphQLEmailAddress } from './scalars/emailAddress.scalar';
+import { GraphQLObjectId } from './scalars/objectId.scalar';
+import { GraphQLPhoneNumber } from './scalars/phoneNumber.scalar';
+import { GraphQLURL } from './scalars/url.scalar';
+import { extractAuthToken } from './utils/request';
+import { importSchema } from './utils/schema';
+import './utils/yup';
 
 mongoose
   .connect(commonConfig.mongoUri, {
@@ -29,12 +29,12 @@ mongoose
 (mongoose as any).ObjectId.get((v) => v && v.toString()); // converts object ids to strings
 
 export const CommonModule = new GraphQLModule({
-  typeDefs: importSchema(__dirname + "/common.graphql"),
+  typeDefs: importSchema(__dirname + '/common.graphql'),
   resolvers: {
     JSON: GraphQLJSON as any,
-    Date: GraphQLDate,
-    Time: GraphQLTime,
-    DateTime: GraphQLDateTime,
+    Date: GraphQLDate as any,
+    Time: GraphQLTime as any,
+    DateTime: GraphQLDateTime as any,
     ObjectId: GraphQLObjectId as any,
     EmailAddress: GraphQLEmailAddress as any,
     PhoneNumber: GraphQLPhoneNumber as any,
@@ -50,7 +50,7 @@ export const CommonModule = new GraphQLModule({
   },
   providers: [
     {
-      provide: "mongoose",
+      provide: 'mongoose',
       useValue: mongoose,
     },
   ],
