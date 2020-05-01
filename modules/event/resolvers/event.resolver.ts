@@ -1,8 +1,8 @@
 import { EventProvider } from './../providers/event.provider';
-import { User } from './../../user/models/user.model';
 import { MutationResolvers, EventDeletedType } from './../../../generated';
 import { QueryResolvers } from '../../../generated';
 import { Event } from '../models/event.model';
+import { isAuthenticated } from '../../user/compositions/user.compositions';
 
 export const eventResolvers = {
   Query: {
@@ -15,8 +15,12 @@ export const eventResolvers = {
   } as QueryResolvers,
 
   Mutation: {
-    createEvent: async (_, { input }, { injector }): Promise<Event> => {
-      return injector.get(EventProvider).create(input);
+    createEvent: async (
+      _,
+      { input },
+      { injector, currentUser }
+    ): Promise<Event> => {
+      return injector.get(EventProvider).create(input, currentUser.id);
     },
     updateEvent: async (_, { input }, { injector }): Promise<Event> => {
       return injector.get(EventProvider).update(input);
@@ -27,4 +31,14 @@ export const eventResolvers = {
   } as MutationResolvers,
 };
 
-export const eventResolversComposition = {};
+export const eventResolversComposition: any = {
+  Query: {
+    events: [isAuthenticated()],
+    event: [isAuthenticated()],
+  },
+  Mutation: {
+    createEvent: [isAuthenticated()],
+    updateEvent: [isAuthenticated()],
+    deleteEvent: [isAuthenticated()],
+  },
+};

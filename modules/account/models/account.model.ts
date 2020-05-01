@@ -1,9 +1,10 @@
-import { User } from "./../../user/models/user.model";
-import { prop, Typegoose } from "typegoose";
-import { AccountStatus } from "../../../generated";
-import { Types } from "mongoose";
+import { User } from './../../user/models/user.model';
+import { prop } from 'typegoose';
+import { AccountStatus } from '../../../generated';
+import { Types } from 'mongoose';
+import Common from '../../common/models/common.model';
 
-export class Account extends Typegoose {
+export class Account extends Common {
   id: string;
 
   _id: string | Types.ObjectId;
@@ -13,14 +14,8 @@ export class Account extends Typegoose {
 
   @prop({ enum: AccountStatus, default: AccountStatus.Active })
   status: AccountStatus;
-
-  @prop()
-  createdAt: Date;
-
-  @prop()
-  updatedAt: Date;
 }
 
 export const AccountModel = new Account().getModelForClass(Account, {
-  schemaOptions: { timestamps: true, validateBeforeSave: false }
+  schemaOptions: { timestamps: true, validateBeforeSave: false },
 });

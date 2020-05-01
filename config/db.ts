@@ -1,4 +1,4 @@
 export default {
-  mongoUri: process.env.MONGO_URI || "mongodb://localhost:27017",
-  mongoDbName: process.env.MONGO_DB_NAME || "app_test",
+  mongoUri: process.env.MONGO_URI || 'mongodb://localhost:27017',
+  mongoDbName: process.env.MONGO_DB_NAME || 'ticket_app',
 };

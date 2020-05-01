@@ -1,0 +1,83 @@
+type Query {
+  tickets: [Ticket!]
+  ticket(id: ID!): Ticket
+}
+
+type Mutation {
+  createTicket(input: CreateTicketInput): Ticket!
+  updateTicket(input: UpdateTicketInput): Ticket!
+  deleteTicket(id: ID!): TicketDeletedType!
+  duplicateTicket(input: DuplicateTicketInput!): Ticket!
+}
+
+type Ticket {
+  id: ID!
+  event: Event!
+  name: String!
+  description: String
+  available: Int!
+  amount: Int!
+  lot: TicketLot!
+  quantityPerPurchase: TicketQuantityPerPurchase!
+  category: TicketCategory!
+  status: TicketStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+type TicketLot {
+  init: DateTime!
+  finish: DateTime!
+}
+
+# O max não pode ser maior que available
+type TicketQuantityPerPurchase {
+  min: Int!
+  max: Int!
+}
+
+type TicketDeletedType {
+  id: ID!
+  status: TicketStatus!
+  deletedAt: DateTime!
+}
+
+enum TicketCategory {
+  FREE
+  PAID
+}
+
+enum TicketStatus {
+  ACTIVE
+  DISABLED
+}
+
+input CreateTicketInput {
+  event: Event!
+  name: String!
+  description: String
+  available: Int!
+  amount: Int!
+  lot: TicketLot!
+  quantityPerPurchase: TicketQuantityPerPurchase!
+  category: TicketCategory!
+}
+
+input UpdateTicketInput {
+  id: ID!
+  name: String
+  description: String
+  available: Int
+  lot: TicketLot
+  quantityPerPurchase: TicketQuantityPerPurchase
+  category: TicketCategory
+}
+
+input DuplicateTicketInput {
+  ticketId: ID!
+  available: Int
+  amount: Int
+  lot: TicketLot
+  quantityPerPurchase: TicketQuantityPerPurchase
+}

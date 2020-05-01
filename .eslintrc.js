@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
+    'eslint-config-prettier',
   ],
   globals: {
     Atomics: 'readonly',
@@ -16,14 +17,14 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'eslint-plugin-prettier'],
   rules: {
     'no-undef': 'warn',
     'no-unused-vars': 'warn',
-    'typescript/no-use-before-define': 'warn',
-    'typescript/no-unused-vars': 'warn',
+    // 'typescript/no-use-before-define': 'warn',
+    // 'typescript/no-unused-vars': 'warn',
     'prettier/prettier': [
-      'error',
+      'warn',
       {
         parser: 'typescript',
         semi: true,

@@ -62,6 +62,17 @@ export type CreateEventInput = {
   finalDate: Scalars['DateTime'];
 };
 
+export type CreateTicketInput = {
+  event: Event;
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  available: Scalars['Int'];
+  amount: Scalars['Int'];
+  lot: TicketLot;
+  quantityPerPurchase: TicketQuantityPerPurchase;
+  category: TicketCategory;
+};
+
 export type CreateUserInput = {
   email: Scalars['EmailAddress'];
   password: Scalars['String'];
@@ -71,6 +82,14 @@ export type CreateUserInput = {
 export enum Currency {
   Brl = 'BRL',
 }
+
+export type DuplicateTicketInput = {
+  ticketId: Scalars['ID'];
+  available?: Maybe<Scalars['Int']>;
+  amount?: Maybe<Scalars['Int']>;
+  lot?: Maybe<TicketLot>;
+  quantityPerPurchase?: Maybe<TicketQuantityPerPurchase>;
+};
 
 export type Event = {
   __typename?: 'Event';
@@ -128,6 +147,10 @@ export type Mutation = {
   createEvent: Event;
   updateEvent: Event;
   deleteEvent: EventDeletedType;
+  createTicket: Ticket;
+  updateTicket: Ticket;
+  deleteTicket: TicketDeletedType;
+  duplicateTicket: Ticket;
   authenticate: AuthenticatePayload;
   createUser: User;
   updateUser: User;
@@ -149,6 +172,22 @@ export type MutationDeleteEventArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationCreateTicketArgs = {
+  input?: Maybe<CreateTicketInput>;
+};
+
+export type MutationUpdateTicketArgs = {
+  input?: Maybe<UpdateTicketInput>;
+};
+
+export type MutationDeleteTicketArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationDuplicateTicketArgs = {
+  input: DuplicateTicketInput;
+};
+
 export type MutationAuthenticateArgs = {
   input: AuthenticateInput;
 };
@@ -166,12 +205,64 @@ export type Query = {
   accounts: Array<Maybe<Account>>;
   events?: Maybe<Array<Event>>;
   event?: Maybe<Event>;
+  tickets?: Maybe<Array<Ticket>>;
+  ticket?: Maybe<Ticket>;
   currentUser: User;
 };
 
 export type QueryEventArgs = {
   id: Scalars['ID'];
 };
+
+export type QueryTicketArgs = {
+  id: Scalars['ID'];
+};
+
+export type Ticket = {
+  __typename?: 'Ticket';
+  id: Scalars['ID'];
+  event: Event;
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  available: Scalars['Int'];
+  amount: Scalars['Int'];
+  lot: TicketLot;
+  quantityPerPurchase: TicketQuantityPerPurchase;
+  category: TicketCategory;
+  status: TicketStatus;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  deletedAt: Scalars['DateTime'];
+};
+
+export enum TicketCategory {
+  Free = 'FREE',
+  Paid = 'PAID',
+}
+
+export type TicketDeletedType = {
+  __typename?: 'TicketDeletedType';
+  id: Scalars['ID'];
+  status: TicketStatus;
+  deletedAt: Scalars['DateTime'];
+};
+
+export type TicketLot = {
+  __typename?: 'TicketLot';
+  init: Scalars['DateTime'];
+  finish: Scalars['DateTime'];
+};
+
+export type TicketQuantityPerPurchase = {
+  __typename?: 'TicketQuantityPerPurchase';
+  min: Scalars['Int'];
+  max: Scalars['Int'];
+};
+
+export enum TicketStatus {
+  Active = 'ACTIVE',
+  Disabled = 'DISABLED',
+}
 
 export type UpdateAccountInput = {
   id: Scalars['ID'];
@@ -187,6 +278,16 @@ export type UpdateEventInput = {
   visibility?: Maybe<EventVisibility>;
   initialDate?: Maybe<Scalars['DateTime']>;
   finalDate?: Maybe<Scalars['DateTime']>;
+};
+
+export type UpdateTicketInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  available?: Maybe<Scalars['Int']>;
+  lot?: Maybe<TicketLot>;
+  quantityPerPurchase?: Maybe<TicketQuantityPerPurchase>;
+  category?: Maybe<TicketCategory>;
 };
 
 export type UpdateUserInput = {
@@ -301,11 +402,23 @@ export type ResolversTypes = {
   EventCategory: ResolverTypeWrapper<Partial<EventCategory>>;
   EventStatus: ResolverTypeWrapper<Partial<EventStatus>>;
   EventVisibility: ResolverTypeWrapper<Partial<EventVisibility>>;
+  Ticket: ResolverTypeWrapper<Partial<Ticket>>;
+  Int: ResolverTypeWrapper<Partial<Scalars['Int']>>;
+  TicketLot: ResolverTypeWrapper<Partial<TicketLot>>;
+  TicketQuantityPerPurchase: ResolverTypeWrapper<
+    Partial<TicketQuantityPerPurchase>
+  >;
+  TicketCategory: ResolverTypeWrapper<Partial<TicketCategory>>;
+  TicketStatus: ResolverTypeWrapper<Partial<TicketStatus>>;
   Mutation: ResolverTypeWrapper<{}>;
   UpdateAccountInput: ResolverTypeWrapper<Partial<UpdateAccountInput>>;
   CreateEventInput: ResolverTypeWrapper<Partial<CreateEventInput>>;
   UpdateEventInput: ResolverTypeWrapper<Partial<UpdateEventInput>>;
   EventDeletedType: ResolverTypeWrapper<Partial<EventDeletedType>>;
+  CreateTicketInput: ResolverTypeWrapper<Partial<CreateTicketInput>>;
+  UpdateTicketInput: ResolverTypeWrapper<Partial<UpdateTicketInput>>;
+  TicketDeletedType: ResolverTypeWrapper<Partial<TicketDeletedType>>;
+  DuplicateTicketInput: ResolverTypeWrapper<Partial<DuplicateTicketInput>>;
   AuthenticateInput: ResolverTypeWrapper<Partial<AuthenticateInput>>;
   AuthenticatePayload: ResolverTypeWrapper<Partial<AuthenticatePayload>>;
   CreateUserInput: ResolverTypeWrapper<Partial<CreateUserInput>>;
@@ -339,11 +452,21 @@ export type ResolversParentTypes = {
   EventCategory: Partial<EventCategory>;
   EventStatus: Partial<EventStatus>;
   EventVisibility: Partial<EventVisibility>;
+  Ticket: Partial<Ticket>;
+  Int: Partial<Scalars['Int']>;
+  TicketLot: Partial<TicketLot>;
+  TicketQuantityPerPurchase: Partial<TicketQuantityPerPurchase>;
+  TicketCategory: Partial<TicketCategory>;
+  TicketStatus: Partial<TicketStatus>;
   Mutation: {};
   UpdateAccountInput: Partial<UpdateAccountInput>;
   CreateEventInput: Partial<CreateEventInput>;
   UpdateEventInput: Partial<UpdateEventInput>;
   EventDeletedType: Partial<EventDeletedType>;
+  CreateTicketInput: Partial<CreateTicketInput>;
+  UpdateTicketInput: Partial<UpdateTicketInput>;
+  TicketDeletedType: Partial<TicketDeletedType>;
+  DuplicateTicketInput: Partial<DuplicateTicketInput>;
   AuthenticateInput: Partial<AuthenticateInput>;
   AuthenticatePayload: Partial<AuthenticatePayload>;
   CreateUserInput: Partial<CreateUserInput>;
@@ -476,6 +599,30 @@ export type MutationResolvers<
     ContextType,
     MutationDeleteEventArgs
   >;
+  createTicket?: Resolver<
+    ResolversTypes['Ticket'],
+    ParentType,
+    ContextType,
+    MutationCreateTicketArgs
+  >;
+  updateTicket?: Resolver<
+    ResolversTypes['Ticket'],
+    ParentType,
+    ContextType,
+    MutationUpdateTicketArgs
+  >;
+  deleteTicket?: Resolver<
+    ResolversTypes['TicketDeletedType'],
+    ParentType,
+    ContextType,
+    MutationDeleteTicketArgs
+  >;
+  duplicateTicket?: Resolver<
+    ResolversTypes['Ticket'],
+    ParentType,
+    ContextType,
+    MutationDuplicateTicketArgs
+  >;
   authenticate?: Resolver<
     ResolversTypes['AuthenticatePayload'],
     ParentType,
@@ -526,7 +673,74 @@ export type QueryResolvers<
     ContextType,
     QueryEventArgs
   >;
+  tickets?: Resolver<
+    Maybe<Array<ResolversTypes['Ticket']>>,
+    ParentType,
+    ContextType
+  >;
+  ticket?: Resolver<
+    Maybe<ResolversTypes['Ticket']>,
+    ParentType,
+    ContextType,
+    QueryTicketArgs
+  >;
   currentUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+};
+
+export type TicketResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes['Ticket']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  available?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  lot?: Resolver<ResolversTypes['TicketLot'], ParentType, ContextType>;
+  quantityPerPurchase?: Resolver<
+    ResolversTypes['TicketQuantityPerPurchase'],
+    ParentType,
+    ContextType
+  >;
+  category?: Resolver<
+    ResolversTypes['TicketCategory'],
+    ParentType,
+    ContextType
+  >;
+  status?: Resolver<ResolversTypes['TicketStatus'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+};
+
+export type TicketDeletedTypeResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes['TicketDeletedType']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['TicketStatus'], ParentType, ContextType>;
+  deletedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+};
+
+export type TicketLotResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes['TicketLot']
+> = {
+  init?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  finish?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+};
+
+export type TicketQuantityPerPurchaseResolvers<
+  ContextType = AppModuleContext,
+  ParentType = ResolversParentTypes['TicketQuantityPerPurchase']
+> = {
+  min?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  max?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export interface TimeScalarConfig
@@ -567,6 +781,10 @@ export type Resolvers<ContextType = AppModuleContext> = {
   ObjectId?: GraphQLScalarType;
   PhoneNumber?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
+  Ticket?: TicketResolvers<ContextType>;
+  TicketDeletedType?: TicketDeletedTypeResolvers<ContextType>;
+  TicketLot?: TicketLotResolvers<ContextType>;
+  TicketQuantityPerPurchase?: TicketQuantityPerPurchaseResolvers<ContextType>;
   Time?: GraphQLScalarType;
   URL?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;

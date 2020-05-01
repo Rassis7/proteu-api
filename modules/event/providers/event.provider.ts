@@ -1,3 +1,4 @@
+import { User } from './../../user/models/user.model';
 import { ApolloError } from 'apollo-server-core';
 import {
   CreateEventInput,
@@ -24,9 +25,9 @@ export class EventProvider {
     }).exec();
   }
 
-  async create(input: CreateEventInput): Promise<Event> {
+  async create(input: CreateEventInput, userId: string): Promise<Event> {
     await this.validadeCreateInput(input);
-    return EventModel.create(input);
+    return EventModel.create({ ...input, user: userId });
   }
 
   async update(input: UpdateEventInput): Promise<Event> {

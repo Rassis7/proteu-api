@@ -1,10 +1,12 @@
+import { User } from './../../user/models/user.model';
 import {
   EventCategory,
   EventVisibility,
   EventStatus,
 } from './../../../generated';
 import { Types } from 'mongoose';
-import { Typegoose, prop } from 'typegoose';
+import { prop } from 'typegoose';
+import Common from '../../common/models/common.model';
 
 export class LocationEvent {
   lat: string;
@@ -18,7 +20,7 @@ export class LocationEvent {
 //   linkedin: string;
 // }
 
-export class Event extends Typegoose {
+export class Event extends Common {
   id: string;
 
   _id: string | Types.ObjectId;
@@ -50,23 +52,14 @@ export class Event extends Typegoose {
   // @prop()
   // social?: SocialEvent;
 
-  // @prop({ ref: Account })
-  // account: string | Types.ObjectId;
+  @prop({ ref: User })
+  createdBy: User;
 
   @prop()
   initialDate: Date;
 
   @prop()
   finalDate: Date;
-
-  @prop()
-  createdAt: Date;
-
-  @prop()
-  updatedAt: Date;
-
-  @prop()
-  deletedAt: Date;
 }
 
 export const EventModel = new Event().getModelForClass(Event, {
