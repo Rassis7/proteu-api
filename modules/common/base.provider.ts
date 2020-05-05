@@ -8,15 +8,15 @@ export abstract class BaseService<T extends Typegoose> {
     this.model = model;
   }
 
-  async findAll(filter = {} as Partial<T>): Promise<InstanceType<T>[]> {
+  async getAll(filter = {} as Partial<T>): Promise<InstanceType<T>[]> {
     return this.model.find(filter).exec();
   }
 
-  async findOne(filter = {} as Partial<T>): Promise<InstanceType<T>> {
+  async getOne(filter = {} as Partial<T>): Promise<InstanceType<T>> {
     return this.model.findOne(filter).exec();
   }
 
-  async findById(id: string | Types.ObjectId): Promise<InstanceType<T>> {
+  async getById(id: string | Types.ObjectId): Promise<InstanceType<T>> {
     return this.model.findById(this.formatId(id)).exec();
   }
 
@@ -30,7 +30,7 @@ export abstract class BaseService<T extends Typegoose> {
 
   async update(
     id: string | Types.ObjectId,
-    item: Partial<T>,
+    item: Partial<T>
   ): Promise<InstanceType<T>> {
     return this.model
       .findByIdAndUpdate(this.formatId(id), item, { new: true })
@@ -44,12 +44,12 @@ export abstract class BaseService<T extends Typegoose> {
   async findOneAndUpdate(
     id: string | Types.ObjectId,
     updatePayment: Partial<T>,
-    newObject: boolean = true,
+    newObject: boolean = true
   ): Promise<InstanceType<T>> {
     return this.model.findOneAndUpdate(
       { _id: this.formatId(id) },
       { $set: updatePayment },
-      { new: newObject },
+      { new: newObject }
     );
   }
 

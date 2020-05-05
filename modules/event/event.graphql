@@ -1,0 +1,87 @@
+type Query {
+  events: [Event!]
+  event(id: ID!): Event
+}
+
+type Mutation {
+  createEvent(input: CreateEventInput): Event!
+  updateEvent(input: UpdateEventInput): Event!
+  deleteEvent(id: ID!): EventDeletedType!
+}
+
+type Event {
+  id: ID!
+  name: String!
+  description: String!
+  # image: File
+  # video: URL
+  # location: LocationEvent
+  category: EventCategory!
+  status: EventStatus!
+  visibility: EventVisibility!
+  # social: SocialEvent
+  initialDate: DateTime!
+  finalDate: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+# type LocationEvent {
+#   lat: String!
+#   long: String!
+# }
+
+# type SocialEvent {
+#   instagram: URL
+#   facebook: URL
+#   twitter: URL
+#   linkedin: URL
+#   site: URL
+# }
+
+enum EventCategory {
+  SOCIAL
+  BUSINESS
+  RELIGIOUS
+  ACADEMIC
+  CULTURAL
+  SPORTS
+  POLITIC
+  EDUCATIONAL
+}
+
+enum EventStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum EventVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+type EventDeletedType {
+  id: ID!
+  status: EventStatus!
+  deletedAt: DateTime!
+}
+
+input CreateEventInput {
+  name: String!
+  description: String!
+  category: EventCategory!
+  visibility: EventVisibility
+  initialDate: DateTime!
+  finalDate: DateTime!
+}
+
+input UpdateEventInput {
+  id: ID!
+  name: String
+  description: String
+  category: EventCategory
+  visibility: EventVisibility
+  initialDate: DateTime
+  finalDate: DateTime
+}

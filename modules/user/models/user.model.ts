@@ -1,8 +1,9 @@
-import { prop, Typegoose } from "typegoose";
-import { UserRole, UserStatus } from "../../../generated";
-import { Types } from "mongoose";
+import { prop } from 'typegoose';
+import { UserRole, UserStatus } from '../../../generated';
+import { Types } from 'mongoose';
+import Common from '../../common/models/common.model';
 
-export class User extends Typegoose {
+export class User extends Common {
   id: string;
 
   _id: string | Types.ObjectId;
@@ -21,12 +22,6 @@ export class User extends Typegoose {
 
   @prop()
   password: string;
-
-  @prop()
-  createdAt: Date;
-
-  @prop()
-  updatedAt: Date;
 }
 
 export const UserModel = new User().getModelForClass(User, {

@@ -1,13 +1,10 @@
-import { AccountProvider } from "./../../account/providers/account.provider";
-import { UserResolvers } from "./../../../generated";
-import { QueryResolvers, MutationResolvers } from "../../../generated";
-import { UserProvider } from "../providers/user.provider";
-import { isAuthenticated } from "../compositions/user.compositions";
-import { Account } from "../../account/models/account.model";
+import { QueryResolvers, MutationResolvers } from '../../../generated';
+import { UserProvider } from '../providers/user.provider';
+import { isAuthenticated } from '../compositions/user.compositions';
 
 export const userResolvers = {
   Query: {
-    currentUser: async (root, args, { currentUser }) => currentUser
+    currentUser: async (root, args, { currentUser }) => currentUser,
   } as QueryResolvers,
 
   Mutation: {
@@ -22,17 +19,17 @@ export const userResolvers = {
     },
     updateUser: async (root, { input }, { injector, currentUser: user }) => {
       return injector.get(UserProvider).updateUser(user, input);
-    }
-  } as MutationResolvers
+    },
+  } as MutationResolvers,
 };
 
 export const userResolversComposition: any = {
   Query: {
-    currentUser: [isAuthenticated()]
+    currentUser: [isAuthenticated()],
   },
   Mutation: {
     createUser: [],
     authenticate: [],
-    updateUser: [isAuthenticated()]
-  }
+    updateUser: [isAuthenticated()],
+  },
 };

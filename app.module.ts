@@ -1,9 +1,10 @@
-import { GraphQLModule, ModuleContext } from "@graphql-modules/core";
-import * as fastify from "fastify";
-import "reflect-metadata";
-import { AccountModule } from "./modules/account/account.module";
-import { UserModule } from "./modules/user/user.module";
-import { User } from "./modules/user/models/user.model";
+import { TicketModule } from './modules/ticket/ticket.module';
+import { GraphQLModule, ModuleContext } from '@graphql-modules/core';
+import * as fastify from 'fastify';
+import 'reflect-metadata';
+import { User } from './modules/user/models/user.model';
+import { UserModule } from './modules/user/user.module';
+import { EventModule } from './modules/event/event.module';
 
 export interface AppModuleSession {
   req: fastify.FastifyRequest<any>;
@@ -16,5 +17,5 @@ export interface AppModuleContext
   }> {}
 
 export const AppModule = new GraphQLModule({
-  imports: [AccountModule, UserModule]
+  imports: [UserModule, EventModule, TicketModule],
 });

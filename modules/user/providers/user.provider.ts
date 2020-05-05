@@ -1,45 +1,33 @@
-import { Types } from "mongoose";
-import { AccountModel } from "./../../account/models/account.model";
-import { Injectable } from "@graphql-modules/di";
-import { AuthenticationError, ApolloError } from "apollo-server-core";
-import * as argon2 from "argon2";
-import { signToken, verifyToken } from "../../common/utils/jwt";
+import { Types } from 'mongoose';
+import { Injectable } from '@graphql-modules/di';
+import { AuthenticationError, ApolloError } from 'apollo-server-core';
+import * as argon2 from 'argon2';
+import { signToken, verifyToken } from '../../common/utils/jwt';
 import {
   AuthenticateInput,
   UserStatus,
   CreateUserInput,
-  UpdateUserInput
-} from "../../../generated";
-import { UserModel, User } from "../models/user.model";
+  UpdateUserInput,
+} from '../../../generated';
+import { UserModel, User } from '../models/user.model';
 
 @Injectable()
 export class UserProvider {
   async createUser(input: CreateUserInput) {
     const userInput = {
       ...input,
-      password: await argon2.hash(input.password)
+      password: await argon2.hash(input.password),
     };
 
     try {
       const user = await UserModel.create(userInput);
 
-      if (user) {
-        const account = await AccountModel.create({
-          admin: user.id
-        });
-        if (!account)
-          throw new ApolloError(
-            "There was an error creating your account, please try again",
-            "ERROR_CREATE_ACCOUNT"
-          );
-      }
-
       return user;
     } catch (err) {
-      if (err.name === "MongoError" && err.code === 11000) {
+      if (err.name === 'MongoError' && err.code === 11000) {
         throw new ApolloError(
-          "A user with the specified email already exists",
-          "EMAIL_ALREADY_EXISTS"
+          'A user with the specified email already exists',
+          'EMAIL_ALREADY_EXISTS'
         );
       }
 
@@ -54,7 +42,7 @@ export class UserProvider {
     if (returnPassword) {
       return UserModel.findById(id);
     } else {
-      return UserModel.findById(id, "+password");
+      return UserModel.findById(id, '+password');
     }
   }
 
@@ -65,13 +53,13 @@ export class UserProvider {
     if (returnPassword) {
       return UserModel.findOne(
         {
-          email
+          email,
         },
-        "+password"
+        '+password'
       );
     } else {
       return UserModel.findOne({
-        email
+        email,
       });
     }
   }
@@ -90,17 +78,17 @@ export class UserProvider {
     const user = await this.getUserByEmail(input.email, true);
 
     if (!user) {
-      throw new AuthenticationError("User not found.");
+      throw new AuthenticationError('User not found.');
     }
 
     if (user.status !== UserStatus.Active) {
-      throw new AuthenticationError("User is not active.");
+      throw new AuthenticationError('User is not active.');
     }
 
     const isPasswordValid = await argon2.verify(user.password, input.password);
 
     if (!isPasswordValid) {
-      throw new AuthenticationError("Invalid password.");
+      throw new AuthenticationError('Invalid password.');
     }
 
     return user;
@@ -126,7 +114,7 @@ export class UserProvider {
     // }
 
     try {
-      const tokenPayload = verifyToken(token, "user");
+      const tokenPayload = verifyToken(token, 'user');
       return this.getActiveUserById(tokenPayload.sub);
     } catch (error) {}
 
@@ -135,9 +123,9 @@ export class UserProvider {
 
   generateToken(userId: string): string {
     return signToken({
-      audience: "user",
-      expiresIn: "30d",
-      subject: userId
+      audience: 'user',
+      expiresIn: '30d',
+      subject: userId,
     });
   }
 }
