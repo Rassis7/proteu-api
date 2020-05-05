@@ -1,5 +1,5 @@
 type Query {
-  tickets: [Ticket!]
+  tickets(eventId: ID!): [Ticket!]
   ticket(id: ID!): Ticket
 }
 
@@ -7,7 +7,7 @@ type Mutation {
   createTicket(input: CreateTicketInput): Ticket!
   updateTicket(input: UpdateTicketInput): Ticket!
   deleteTicket(id: ID!): TicketDeletedType!
-  duplicateTicket(input: DuplicateTicketInput!): Ticket!
+  # duplicateTicket(input: DuplicateTicketInput!): Ticket!
 }
 
 type Ticket {
@@ -16,7 +16,7 @@ type Ticket {
   name: String!
   description: String
   available: Int!
-  amount: Int!
+  amount: Int
   lot: TicketLot!
   quantityPerPurchase: TicketQuantityPerPurchase!
   category: TicketCategory!
@@ -27,8 +27,8 @@ type Ticket {
 }
 
 type TicketLot {
-  init: DateTime!
-  finish: DateTime!
+  initial: DateTime!
+  end: DateTime!
 }
 
 # O max não pode ser maior que available
@@ -54,30 +54,44 @@ enum TicketStatus {
 }
 
 input CreateTicketInput {
-  event: Event!
+  event: ObjectId!
   name: String!
   description: String
   available: Int!
-  amount: Int!
-  lot: TicketLot!
-  quantityPerPurchase: TicketQuantityPerPurchase!
-  category: TicketCategory!
-}
-
-input UpdateTicketInput {
-  id: ID!
-  name: String
-  description: String
-  available: Int
-  lot: TicketLot
-  quantityPerPurchase: TicketQuantityPerPurchase
+  amount: Int
+  lot: TicketLotInput!
+  quantityPerPurchase: TicketQuantityPerPurchaseInput
+  # Default Paid
   category: TicketCategory
 }
 
+input UpdateTicketInput {
+  id: ObjectId!
+  name: String
+  description: String
+  available: Int
+  lot: TicketLotInput
+  quantityPerPurchase: TicketQuantityPerPurchaseInput
+}
+
 input DuplicateTicketInput {
-  ticketId: ID!
+  id: ObjectId!
   available: Int
   amount: Int
-  lot: TicketLot
-  quantityPerPurchase: TicketQuantityPerPurchase
+  lot: TicketLotInput
+  quantityPerPurchase: TicketQuantityPerPurchaseInput
+}
+
+input TicketQuantityPerPurchaseInput {
+  # Default 1
+  min: Int!
+  # Default 1
+  max: Int!
+}
+
+input TicketLotInput {
+  # Min now
+  initial: DateTime!
+  # Min initial
+  end: DateTime!
 }

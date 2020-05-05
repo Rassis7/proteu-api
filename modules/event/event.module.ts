@@ -1,3 +1,4 @@
+import { UserModule } from './../user/user.module';
 import { GraphQLModule } from '@graphql-modules/core';
 import { CommonModule } from '../common/common.module';
 import { importSchema } from '../common/utils/schema';
@@ -8,7 +9,7 @@ import {
 } from './resolvers/event.resolver';
 
 export const EventModule = new GraphQLModule({
-  imports: [CommonModule],
+  imports: [CommonModule, UserModule],
   providers: [EventProvider],
   typeDefs: importSchema(__dirname + '/event.graphql'),
   resolvers: eventResolvers,

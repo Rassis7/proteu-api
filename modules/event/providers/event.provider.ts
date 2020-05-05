@@ -1,4 +1,3 @@
-import { User } from './../../user/models/user.model';
 import { ApolloError } from 'apollo-server-core';
 import {
   CreateEventInput,

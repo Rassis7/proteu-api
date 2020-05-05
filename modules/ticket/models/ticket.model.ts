@@ -5,8 +5,8 @@ import { prop } from 'typegoose';
 import Common from '../../common/models/common.model';
 
 class TicketLot {
-  init: Date;
-  finish: Date;
+  initial: Date;
+  end: Date;
 }
 
 class TicketQuantityPerPurchase {

@@ -18,12 +18,16 @@ export class LocationEvent {
 //   facebook?: string;
 //   twitter: string;
 //   linkedin: string;
+//   site: string;
 // }
 
 export class Event extends Common {
   id: string;
 
   _id: string | Types.ObjectId;
+
+  @prop({ ref: User })
+  user: User;
 
   @prop()
   name: string;

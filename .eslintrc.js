@@ -6,7 +6,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
-    'eslint-config-prettier',
+    'prettier/@typescript-eslint',
   ],
   globals: {
     Atomics: 'readonly',
@@ -29,7 +29,7 @@ module.exports = {
         parser: 'typescript',
         semi: true,
         singleQuote: true,
-        tabWidth: 4,
+        tabWidth: 2,
         trailingComma: 'all',
       },
     ],

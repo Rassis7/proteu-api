@@ -1,3 +1,4 @@
+import { TicketModule } from './modules/ticket/ticket.module';
 import { GraphQLModule, ModuleContext } from '@graphql-modules/core';
 import * as fastify from 'fastify';
 import 'reflect-metadata';
@@ -16,5 +17,5 @@ export interface AppModuleContext
   }> {}
 
 export const AppModule = new GraphQLModule({
-  imports: [UserModule, EventModule],
+  imports: [UserModule, EventModule, TicketModule],
 });

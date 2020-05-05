@@ -1,3 +1,4 @@
+import { UserModule } from './../user/user.module';
 import { GraphQLModule } from '@graphql-modules/core';
 import { EventModule } from './../event/event.module';
 import { CommonModule } from '../common/common.module';
@@ -9,7 +10,7 @@ import {
 } from './resolvers/ticket.resolver';
 
 export const TicketModule = new GraphQLModule({
-  imports: [CommonModule, EventModule],
+  imports: [CommonModule, UserModule, EventModule],
   providers: [TicketProvider],
   typeDefs: importSchema(__dirname + '/ticket.graphql'),
   resolvers: ticketResolvers,
